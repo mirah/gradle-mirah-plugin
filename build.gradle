@@ -74,8 +74,6 @@ license {
 
 gradleTest {
     versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9'
-
-    onlyIf { !gradle.startParameter.isOffline() }
 }
 
 plugins.withType(JavaPlugin) {
@@ -87,4 +85,8 @@ plugins.withType(JavaPlugin) {
         task.sourceCompatibility = project.sourceCompatibility
         task.targetCompatibility = project.targetCompatibility
     }
+}
+
+check {
+    finalizedBy gradleTest
 }

@@ -11,7 +11,7 @@
 #
 # ============================================================================
 #
-
+package foo
 
 # This code is a rip-off from Mirah HOWTO (http://www.mirah.org/wiki/MirahHowto)
 class Simple
