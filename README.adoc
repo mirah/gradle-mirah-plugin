@@ -2,7 +2,6 @@
 
 == TODO
 
-* License plugin
 * GradleTest
 * Javadoc
 * Publish plugins

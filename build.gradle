@@ -8,11 +8,13 @@ buildscript {
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1'
         classpath "com.netflix.nebula:gradle-extra-configurations-plugin:2.2.2"
+        classpath "org.ysb33r.gradle:gradletest:0.5.4"
     }
 }
 
 apply plugin: 'groovy'
 apply plugin: 'com.github.hierynomus.license'
+apply plugin : 'org.ysb33r.gradletest'
 
 group 'org.ysb33r.gradle'
 version '0.9-SNAPSHOT'
@@ -41,6 +43,7 @@ dependencies {
     }
 
     mirahTesting "org.mirah:mirah:${mirahTestVer}"
+    gradleTest "org.mirah:mirah:${mirahTestVer}"
 }
 
 task prepareTestRepo( type : Copy ) {
@@ -57,17 +60,6 @@ test {
 
 }
 
-plugins.withType(JavaPlugin) {
-    project.tasks.withType(GroovyCompile) { task ->
-        task.sourceCompatibility = project.sourceCompatibility
-        task.targetCompatibility = project.targetCompatibility
-    }
-    project.tasks.withType(JavaCompile) { task ->
-        task.sourceCompatibility = project.sourceCompatibility
-        task.targetCompatibility = project.targetCompatibility
-    }
-}
-
 license {
     header = rootProject.file('config/apache-header')
     strictCheck = true
@@ -78,4 +70,21 @@ license {
     }
     ext.year = '2015'
     excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md','**/*.properties', '**/*.txt', '**/*.bz2'])
+}
+
+gradleTest {
+    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9'
+
+    onlyIf { !gradle.startParameter.isOffline() }
+}
+
+plugins.withType(JavaPlugin) {
+    project.tasks.withType(GroovyCompile) { task ->
+        task.sourceCompatibility = project.sourceCompatibility
+        task.targetCompatibility = project.targetCompatibility
+    }
+    project.tasks.withType(JavaCompile) { task ->
+        task.sourceCompatibility = project.sourceCompatibility
+        task.targetCompatibility = project.targetCompatibility
+    }
 }

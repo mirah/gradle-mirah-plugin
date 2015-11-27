@@ -1,0 +1,17 @@
+buildscript {
+    dependencies {
+        classpath 'org.ysb33r.gradle:mirah-gradle-plugin:%%VERSION%%'
+        classpath fileTree(dir : "../../repo", include : '*.jar')
+    }
+}
+
+
+apply plugin : 'org.mirah.lang'
+
+dependencies {
+    compile 'org.mirah:mirah:0.1.4'
+}
+
+task runGradleTest {
+    finalizedBy build
+}
