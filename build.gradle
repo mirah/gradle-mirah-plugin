@@ -22,6 +22,16 @@ group 'org.ysb33r.gradle'
 version '0.9-SNAPSHOT'
 
 sourceCompatibility = 1.7
+plugins.withType(JavaPlugin) {
+    project.tasks.withType(GroovyCompile) { task ->
+        task.sourceCompatibility = project.sourceCompatibility
+        task.targetCompatibility = project.targetCompatibility
+    }
+    project.tasks.withType(JavaCompile) { task ->
+        task.sourceCompatibility = project.sourceCompatibility
+        task.targetCompatibility = project.targetCompatibility
+    }
+}
 
 repositories {
     jcenter()
@@ -48,6 +58,17 @@ dependencies {
     gradleTest "org.mirah:mirah:${mirahTestVer}"
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar) {
+    description "An archive of the JavaDocs for Maven Central"
+    classifier "javadoc"
+    from javadoc
+}
+
 task prepareTestRepo( type : Copy ) {
     from configurations.mirahTesting
     into mirahTestRepo
@@ -60,6 +81,10 @@ test {
         TESTROOT : file("${buildDir}/test/mirah").absolutePath,
         TESTRESOURCES : file('src/test/resources/testcode').absolutePath
 
+}
+
+gradleTest {
+    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9'
 }
 
 check {
@@ -78,21 +103,9 @@ license {
     excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md','**/*.properties', '**/*.txt', '**/*.bz2'])
 }
 
-gradleTest {
-    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9'
+artifacts {
+    archives sourcesJar, javadocJar
 }
-
-plugins.withType(JavaPlugin) {
-    project.tasks.withType(GroovyCompile) { task ->
-        task.sourceCompatibility = project.sourceCompatibility
-        task.targetCompatibility = project.targetCompatibility
-    }
-    project.tasks.withType(JavaCompile) { task ->
-        task.sourceCompatibility = project.sourceCompatibility
-        task.targetCompatibility = project.targetCompatibility
-    }
-}
-
 
 pluginBundle {
     description = 'Mirah language plugin for Gradle'
