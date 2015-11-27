@@ -2,8 +2,8 @@
 
 == TODO
 
-* GradleTest
 * Javadoc
-* Publish plugins
+* sourceJar, javadocJar
 * Clean stale class files
 * Check for Doc task
+* Incremental compilation

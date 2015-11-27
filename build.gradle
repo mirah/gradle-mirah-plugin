@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1'
         classpath "com.netflix.nebula:gradle-extra-configurations-plugin:2.2.2"
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
         classpath "org.ysb33r.gradle:gradletest:0.5.4"
     }
 }
@@ -15,6 +16,7 @@ buildscript {
 apply plugin: 'groovy'
 apply plugin: 'com.github.hierynomus.license'
 apply plugin : 'org.ysb33r.gradletest'
+apply plugin : 'com.gradle.plugin-publish'
 
 group 'org.ysb33r.gradle'
 version '0.9-SNAPSHOT'
@@ -60,6 +62,10 @@ test {
 
 }
 
+check {
+    finalizedBy gradleTest
+}
+
 license {
     header = rootProject.file('config/apache-header')
     strictCheck = true
@@ -87,6 +93,28 @@ plugins.withType(JavaPlugin) {
     }
 }
 
-check {
-    finalizedBy gradleTest
+
+pluginBundle {
+    description = 'Mirah language plugin for Gradle'
+    website     = 'https://github.com/ysb33r/mirah-gradle-plugin'
+    vcsUrl      = 'https://github.com/ysb33r/mirah-gradle-plugin.git'
+
+    tags = ['language','mirah']
+
+    plugins {
+        mirahPlugin {
+            id = 'org.mirah.lang'
+            displayName = 'Mirah language plugin'
+        }
+    }
+
+    mavenCoordinates {
+        groupId = project.group
+        artifactId = archivesBaseName
+    }
+
+}
+
+publishPlugins {
+    onlyIf { !version.endsWith("SNAPSHOT") }
 }
