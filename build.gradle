@@ -1,0 +1,57 @@
+
+apply plugin: 'groovy'
+
+group 'org.ysb33r.gradle'
+version '0.9-SNAPSHOT'
+
+sourceCompatibility = 1.7
+
+repositories {
+    jcenter()
+}
+
+ext {
+    spockGroovyVer = GroovySystem.version.replaceAll(/\.\d+$/,'')
+    mirahTestVer = '0.1.4'
+    mirahTestRepo = "${buildDir}/test/mirahTestRepo"
+}
+
+configurations {
+  mirahTesting
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+    testCompile ("org.spockframework:spock-core:1.0-groovy-${spockGroovyVer}") {
+        exclude module : 'groovy-all'
+    }
+
+    mirahTesting "org.mirah:mirah:${mirahTestVer}"
+}
+
+task prepareTestRepo( type : Copy ) {
+    from configurations.mirahTesting
+    into mirahTestRepo
+}
+
+test {
+    dependsOn prepareTestRepo
+
+    systemProperties TESTREPO : file(mirahTestRepo).absolutePath,
+        TESTROOT : file("${buildDir}/test/mirah").absolutePath,
+        TESTRESOURCES : file('src/test/resources/testcode').absolutePath
+
+}
+
+plugins.withType(JavaPlugin) {
+    project.tasks.withType(GroovyCompile) { task ->
+        task.sourceCompatibility = project.sourceCompatibility
+        task.targetCompatibility = project.targetCompatibility
+    }
+    project.tasks.withType(JavaCompile) { task ->
+        task.sourceCompatibility = project.sourceCompatibility
+        task.targetCompatibility = project.targetCompatibility
+    }
+}
+

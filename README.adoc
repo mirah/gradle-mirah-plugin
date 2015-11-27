@@ -1,0 +1,9 @@
+= Mirah Plugin for Gradle
+
+== TODO
+
+* License plugin
+* GradleTest
+* Javadoc
+* Clean stale class files
+* Check for Doc task
