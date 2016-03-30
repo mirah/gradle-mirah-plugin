@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath 'org.ysb33r.gradle:mirah-gradle-plugin:%%VERSION%%'
+        classpath 'org.ysb33r.gradle:gradle-mirah-plugin:%%VERSION%%'
         classpath fileTree(dir : "../../repo", include : '*.jar')
     }
 }

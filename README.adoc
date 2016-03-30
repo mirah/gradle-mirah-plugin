@@ -1,24 +1,11 @@
 = Mirah Plugin for Gradle
 
-== TODO
-
-* Javadoc
-* sourceJar, javadocJar
-* Split MIrahPLugin into MirahBasePlugin + MirahPlugin.
-* Clean stale class files
-* Check for Doc task
-* Incremental compilation
 
 [source,groovy]
 ----
-buildscript {
-    dependencies {
-        classpath 'org.ysb33r.gradle:mirah-gradle-plugin:0.9'
-    }
+plugins {
+  id 'org.mirag.lang' version '0.9'
 }
-
-
-apply plugin : 'org.mirah.lang'
 
 dependencies {
     compile 'org.mirah:mirah:0.1.4' // <1>
@@ -29,9 +16,16 @@ dependencies {
 Now put your sources in `src/main/mirah` or `src/test/mirah`
 
 Two tasks (of type `MirahCompile` are automatically added when the plugin is applied. They are called `compileMirah` and
-`testCompileMirah`.
+`compileTestMirah`.
 
 == Compatibility
 
 * Gradle 2.0 - 2.12
 * JDK 1.7+
+
+== The future
+
+* `MirahDoc` task type, when there is a way to build source docs.
+* Clean stale class files if it is deemed to be an issue.
+* Incremental compilation (when supported by Mirah).
+* Joint compilation (when supported by Mirah).
