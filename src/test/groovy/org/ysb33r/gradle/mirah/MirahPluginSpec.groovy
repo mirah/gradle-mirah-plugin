@@ -26,6 +26,8 @@ import spock.lang.Specification
 class MirahPluginSpec extends Specification {
 
     final static File TESTDIR = new File(TestDefaults.TESTROOT,'MirahPluginSpec')
+    final static String COMPILE_TASK = 'compileMirah'
+    final static String TEST_TASK = 'compileTestMirah'
 
     def project
 
@@ -59,21 +61,21 @@ class MirahPluginSpec extends Specification {
         and: "the sourcesets for mirah are added to main & test"
         sourcesets.main.mirah != null
         sourcesets.test.mirah != null
-        sourcesets.main.getCompileTaskName('mirah') == MirahPlugin.COMPILE_TASK
-        sourcesets.test.getCompileTaskName('mirah') == MirahPlugin.TEST_COMPILE_TASK
+        sourcesets.main.getCompileTaskName('mirah') == COMPILE_TASK
+        sourcesets.test.getCompileTaskName('mirah') == TEST_TASK
 
         and: 'the compilation tasks are added'
-        tasks.getByName(MirahPlugin.COMPILE_TASK) instanceof MirahCompile
-        tasks.getByName(MirahPlugin.TEST_COMPILE_TASK) instanceof MirahCompile
+        tasks.getByName(COMPILE_TASK) instanceof MirahCompile
+        tasks.getByName(TEST_TASK) instanceof MirahCompile
 
         and: 'the compilation tasks are linked to (test)classes lifecyle tasks'
         (depsClasses.any {
-            it instanceof Task && it.name == MirahPlugin.COMPILE_TASK ||
-                it instanceof CharSequence && it.toString() == MirahPlugin.COMPILE_TASK
+            it instanceof Task && it.name == COMPILE_TASK ||
+                it instanceof CharSequence && it.toString() == COMPILE_TASK
         }) != null
         (depsTestClasses.any {
-            it instanceof Task && it.name == MirahPlugin.TEST_COMPILE_TASK ||
-                it instanceof CharSequence && it.toString() == MirahPlugin.TEST_COMPILE_TASK
+            it instanceof Task && it.name == TEST_TASK ||
+                it instanceof CharSequence && it.toString() == TEST_TASK
         }) != null
     }
 
@@ -102,12 +104,12 @@ class MirahPluginSpec extends Specification {
         }
 
         project.evaluate()
-        project.tasks.getByName(MirahPlugin.COMPILE_TASK).with {
+        project.tasks.getByName(COMPILE_TASK).with {
             println classpath.class.name
             println mirahClasspath.class.name
         }
 
-        project.tasks.getByName(MirahPlugin.COMPILE_TASK).execute()
+        project.tasks.getByName(COMPILE_TASK).execute()
 
         then:
         classesDir.exists()

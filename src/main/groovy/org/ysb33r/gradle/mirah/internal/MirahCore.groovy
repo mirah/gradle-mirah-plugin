@@ -11,20 +11,26 @@
  *
  * ============================================================================
  */
-package org.ysb33r.gradle.mirah
+package org.ysb33r.gradle.mirah.internal
 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.file.FileCollection
+
+import java.util.regex.Pattern
 
 /**
  * @author Schalk W. Cronjé
  */
-class MirahPlugin implements Plugin<Project> {
+class MirahCore {
+    static final Pattern MIRAH_FILE_PATTERN = ~/mirah-(\p{Digit}+\.){2}.+\.jar/
 
-    @Override
-    void apply(Project project) {
-        project.apply plugin : MirahBasePlugin
-        project.apply plugin : JavaPlugin
+    /** Returns a {@code FileCollection} that contains the necessary JARs to run Mirah tools
+     *
+     * @param FileCollection Arbitrary classpath
+     * @return Resolved classpath (could be empty).
+     */
+    static FileCollection resolveEngineClasspath(FileCollection classpath) {
+        classpath.filter { File file ->
+            file.name =~ MirahCore.MIRAH_FILE_PATTERN
+        }
     }
 }

@@ -13,18 +13,28 @@
  */
 package org.ysb33r.gradle.mirah
 
-import org.gradle.api.Plugin
-import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.tasks.Input
 
-/**
- * @author Schalk W. Cronjé
+/** Various Mirah compile options
+ *
  */
-class MirahPlugin implements Plugin<Project> {
+class MirahCompileOptions {
+    /** Use new closure implementation
+     *
+     */
+    @Input
+    boolean newClosures = false
 
-    @Override
-    void apply(Project project) {
-        project.apply plugin : MirahBasePlugin
-        project.apply plugin : JavaPlugin
+    /** Returns the options as command-line switches
+     *
+     * @return List suitable to be passed to {@code JavaExec}.
+     */
+    List asCommandOptions() {
+        List args= []
+        if(newClosures) {
+            args+='--new-closures'
+        }
+        args
     }
+
 }

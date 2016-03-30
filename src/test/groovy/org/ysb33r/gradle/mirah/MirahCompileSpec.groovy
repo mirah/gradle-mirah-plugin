@@ -37,6 +37,17 @@ class MirahCompileSpec extends Specification {
         compile = project.tasks.create('foo',MirahCompile)
     }
 
+    def "Setting the destination directory"() {
+        given:
+        compile.with {
+            setDestinationDir new File(TESTDIR,'output')
+        }
+
+        expect:
+        compile.destinationDir == new File(TESTDIR,'output')
+        compile.getDestinationDir() == new File(TESTDIR,'output')
+    }
+
     def "Extract Mirah JAR correctly from classpath"() {
         given:
         compile.classpath = project.fileTree( dir : TestDefaults.REPODIR, includes : ['*.jar'])
@@ -48,7 +59,7 @@ class MirahCompileSpec extends Specification {
     }
 
     def "Given a classpath, compile one file"() {
-        given:
+        when:
         compile.with {
             showAllErrors = true
             setDestinationDir new File(TESTDIR,'output')
@@ -57,6 +68,9 @@ class MirahCompileSpec extends Specification {
             setTargetCompatibility '1.7'
             source new File(TestDefaults.TESTRESOURCES,'Simple.mirah')
         }
+
+        then:
+        compile.destinationDir != null
 
         when:
         compile.execute()

@@ -15,15 +15,18 @@ package org.ysb33r.gradle.mirah
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
+import groovy.transform.PackageScope
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.compile.AbstractCompile
+import org.ysb33r.gradle.mirah.internal.MirahCore
 
 import java.util.regex.Pattern
 
@@ -33,65 +36,83 @@ import java.util.regex.Pattern
 @CompileStatic
 class MirahCompile extends AbstractCompile {
 
-    private static final Pattern MIRAH_FILE_PATTERN = ~/mirah-(\p{Digit}+\.){2}.+\.jar/
-
-    /**
-     * The classpath to use to load the Mirah compiler.
+    /** If Mirah class path is set,r esolve that using {@code project.files},
+     * otherwise resolves from {@code classpath}
+     * @return The classpath to use to load the Mirah compiler.
+     *
      */
     @InputFiles
     FileCollection getMirahClasspath() {
-        if(this.mirahClasspath) {
-            (project as Project).files(this.mirahClasspath)
-        } else {
-            classpath.filter { File file ->
-                file.name =~ MIRAH_FILE_PATTERN
-            }
-        }
+        this.mirahClasspath ?  (project as Project).files(this.mirahClasspath) :
+            MirahCore.resolveEngineClasspath(getClasspath())
     }
 
+    /** Set Mirah tools classpath.
+     *
+     * @param cp Anything that can be resolved with {@code project.files}.
+     */
     void setMirahClasspath(Object cp) {
         this.mirahClasspath = cp
     }
 
-    void mirahClasspath(Object cp) {
-        this.mirahClasspath = cp
-    }
+    /** Options for controlling Mirah byte code generation.
+     */
+    @Nested
+    MirahCompileOptions mirahOptions= new MirahCompileOptions()
+
+    /** Controls error listing. By default all errors will be shown if Gradle is run with
+     * {@code --info} switch.
+     */
+    @Input
+    boolean showAllErrors = project.logger.isEnabled(LogLevel.INFO)
 
 //    @Optional
 //    @InputFiles
 //    FileCollection macroClasspath
 
-    /** Use new closure implementation
-     *
-     */
-    @Input
-    boolean newClosures = false
+//    void setJvmArgs(String... args) {
+//        this.jvmArgs = args as List
+//    }
+//
+//    void jvmArgs(String...args) {
+//        this.jvmArgs+= args as List
+//    }
+//
+//    @Input
+//    List<String> getJvmArgs() {
+//        this.jvmArgs
+//    }
 
-    @Input
-    boolean showAllErrors = project.logger.isEnabled(LogLevel.INFO)
-
-    void setJvmArgs(String... args) {
-        this.jvmArgs = args as List
+    @Override
+    @TaskAction
+    protected void compile() {
+//        doCompile( jvmArgs, compilerArgs, getSource() , getMirahClasspath() )
+        doCompile( [], getCompilerArgs(), getSource() , getMirahClasspath() )
     }
 
-    void jvmArgs(String...args) {
-        this.jvmArgs+= args as List
-    }
+    private void validateCompilerClasspath( final FileCollection cp, final String classpathPropertyName, final String pluginName  ) {
+        if (cp.empty) {
+            throw new InvalidUserDataException(
+                "'${name}.${classpathPropertyName}' must not be empty. If a Mirah compile dependency is provided, " +
+                    "the '${pluginName}' plugin will attempt to configure '${classpathPropertyName}' automatically. " +
+                    "Alternatively, you may configure '${classpathPropertyName}' explicitly.")
+        }
 
-    @Input
-    List<String> getJvmArgs() {
-        this.jvmArgs
     }
 
     /** Translates attributes to compile arguments that mirahc will understand.
      *
      * @return
      */
+    @PackageScope
     List getCompilerArgs() {
-        List args = [
+
+        List args = mirahOptions.asCommandOptions()
+        args+= [
             '--dest', destinationDir.absolutePath,
             '--jvm', targetCompatibility
         ]
+
         if(project.logging.level == LogLevel.INFO) {
             args+= '--verbose'
         } else if(project.logging.level == LogLevel.QUIET) {
@@ -107,10 +128,6 @@ class MirahCompile extends AbstractCompile {
             args+='--all-errors'
         }
 
-        if(newClosures) {
-            args+='--new-closures'
-        }
-
         // TODO: project.gradle.startParameter.??? -> --no-color. Only specific versions of gradle
         //  For now, just turn colour off
         args+='--no-color'
@@ -119,23 +136,6 @@ class MirahCompile extends AbstractCompile {
         // TODO: macroclasspath ?
 
         args
-
-    }
-
-    @Override
-    @TaskAction
-    protected void compile() {
-        doCompile( jvmArgs, compilerArgs, getSource() , getMirahClasspath() )
-    }
-
-    private void validateCompilerClasspath( final FileCollection cp, final String classpathPropertyName, final String pluginName  ) {
-        if (cp.empty) {
-            throw new InvalidUserDataException(
-                "'${name}.${classpathPropertyName}' must not be empty. If a Mirah compile dependency is provided, " +
-                    "the '${pluginName}' plugin will attempt to configure '${classpathPropertyName}' automatically. " +
-                    "Alternatively, you may configure '${classpathPropertyName}' explicitly.")
-        }
-
     }
 
     @CompileDynamic

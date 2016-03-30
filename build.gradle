@@ -19,7 +19,7 @@ apply plugin : 'org.ysb33r.gradletest'
 apply plugin : 'com.gradle.plugin-publish'
 
 group 'org.ysb33r.gradle'
-version '0.9-SNAPSHOT'
+version '0.9'
 
 sourceCompatibility = 1.7
 plugins.withType(JavaPlugin) {
@@ -84,7 +84,7 @@ test {
 }
 
 gradleTest {
-    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9'
+    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9', '2.10', '2.12'
 }
 
 check {
