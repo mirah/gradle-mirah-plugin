@@ -19,6 +19,7 @@ import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.internal.file.FileResolver
 import org.gradle.util.ConfigureUtil
+import org.ysb33r.gradle.mirah.internal.Compatibility
 
 /**
  * @author Schalk W. Cronjé
@@ -27,7 +28,7 @@ import org.gradle.util.ConfigureUtil
 class MirahSourceSet {
 
     static final String LANG_NAME = 'mirah'
-    static final String LANG_NAME_C = LANG_NAME.capitalize()
+    static final String LANG_NAME_C = Compatibility.capitalize(LANG_NAME)
 
     MirahSourceSet(String displayName, FileResolver fileResolver) {
         this.mirah = createSourceDirectorySet(
