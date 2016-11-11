@@ -4,6 +4,6 @@ jdk:
   - oraclejdk7
   - oraclejdk8
 matrix:
-  allow_failures:
-    - jdk: oraclejdk7
+  exclude:
+    - jdk: oraclejdk7 # Building the gradle-mirah-plugin seems to require Java 8.
 
