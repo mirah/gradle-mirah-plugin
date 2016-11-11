@@ -39,7 +39,7 @@ repositories {
 
 ext {
     spockGroovyVer = GroovySystem.version.replaceAll(/\.\d+$/,'')
-    mirahTestVer = '0.1.4'
+    mirahTestVer = '0.2.1'
     mirahTestRepo = "${buildDir}/test/mirahTestRepo"
 }
 
