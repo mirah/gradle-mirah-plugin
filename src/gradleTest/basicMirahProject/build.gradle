@@ -1,9 +1,3 @@
-//buildscript {
-//    dependencies {
-//        classpath 'org.ysb33r.gradle:gradle-mirah-plugin:%%VERSION%%'
-//        classpath fileTree(dir : "../../repo", include : '*.jar')
-//    }
-//}
 
 
 apply plugin : 'org.mirah.lang'
