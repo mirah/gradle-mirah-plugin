@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'org.ysb33r.gradle'
-version = '1.0-SNAPSHOT'
+version = '1.0-beta1-SNAPSHOT'
 
 sourceCompatibility = 1.7
 plugins.withType(JavaPlugin) {
