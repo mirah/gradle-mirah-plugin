@@ -13,11 +13,15 @@
  */
 package org.ysb33r.gradle.mirah.internal
 
-/**
- * @author Schalk W. Cronjé
+import groovy.transform.CompileDynamic
+
+/** Used to maintain backwards compatibility across 2.7-2.8 Gradle boundary.
+ * @since 1.0
  */
-class TestDefaults {
-    final static File TESTRESOURCES = new File(System.getProperty('TESTRESOURCES') ?: './src/test/resources/testcode')
-    final static File TESTROOT = new File(System.getProperty('TESTROOT') ?: './build/test/mirah')
-    final static File REPODIR = new File(System.getProperty('TESTREPO') ?: './build/test/mirahTestRepo')
+class Compatibility {
+
+    @CompileDynamic
+    static String capitalize(final String f) {
+        f.capitalize()
+    }
 }

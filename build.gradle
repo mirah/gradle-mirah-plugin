@@ -1,25 +1,14 @@
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-        jcenter()
-    }
-    dependencies {
-        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1'
-        classpath "com.netflix.nebula:gradle-extra-configurations-plugin:2.2.2"
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
-        classpath "org.ysb33r.gradle:gradletest:0.5.5"
-    }
+plugins {
+    id 'com.gradle.build-scan' version '1.0'
+    id 'groovy'
+//    id 'org.ysb33r.bintray' version '1.5'
+    id 'com.gradle.plugin-publish' version '0.9.4'
+    id 'com.github.hierynomus.license' version '0.13.1'
+    id 'org.ysb33r.gradletest' version '1.0-beta4'
 }
 
-apply plugin: 'groovy'
-apply plugin: 'com.github.hierynomus.license'
-apply plugin : 'org.ysb33r.gradletest'
-apply plugin : 'com.gradle.plugin-publish'
-
 group = 'org.ysb33r.gradle'
-version = '0.9'
+version = '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.7
 plugins.withType(JavaPlugin) {
@@ -50,6 +39,7 @@ configurations {
 dependencies {
     compile localGroovy()
     compile gradleApi()
+    compile 'commons-io:commons-io:2.5'
     testCompile ("org.spockframework:spock-core:1.0-groovy-${spockGroovyVer}") {
         exclude module : 'groovy-all'
     }
@@ -83,12 +73,12 @@ test {
 
 }
 
-gradleTest {
-    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9', '2.10', '2.12', '2.14.1', '3.0', '3.1', '3.2-rc-3'
+check {
+    dependsOn gradleTest
 }
 
-check {
-    finalizedBy gradleTest
+gradleTest {
+    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9', '2.10', '2.12', '2.14', '3.1'
 }
 
 license {
@@ -99,8 +89,9 @@ license {
         groovy ='SLASHSTAR_STYLE'
         mirah = 'SCRIPT_STYLE'
     }
-    ext.year = '2015'
+    ext.year = '2015-2016'
     excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md','**/*.properties', '**/*.txt', '**/*.bz2'])
+    exclude '**/BasicMirahProjectCompatibilitySpec.groovy'
 }
 
 artifacts {
@@ -133,5 +124,13 @@ pluginBundle {
 }
 
 publishPlugins {
+    dependsOn build
+    onlyIf { !version.endsWith("SNAPSHOT") }
+}
+
+task release {
+    group 'Publishing'
+    description 'Builds & releases a new verison of the plugin'
+    dependsOn build, publishPlugins
     onlyIf { !version.endsWith("SNAPSHOT") }
 }

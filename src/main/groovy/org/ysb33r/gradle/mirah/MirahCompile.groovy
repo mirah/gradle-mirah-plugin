@@ -1,6 +1,6 @@
 /*
  * ============================================================================
- * (C) Copyright Schalk W. Cronjé 2015
+ * (C) Copyright Schalk W. Cronjé 2015-2016
  *
  * This software is licensed under the Apache License 2.0
  * See http://www.apache.org/licenses/LICENSE-2.0 for license details
@@ -108,29 +108,29 @@ class MirahCompile extends AbstractCompile {
     List getCompilerArgs() {
 
         List args = mirahOptions.asCommandOptions()
-        args+= [
+        args.addAll ([
             '--dest', destinationDir.absolutePath,
             '--jvm', targetCompatibility
-        ]
+        ])
 
         if(project.logging.level == LogLevel.INFO) {
-            args+= '--verbose'
+            args.add '--verbose'
         } else if(project.logging.level == LogLevel.QUIET) {
-            args+= '--silent'
+            args.add '--silent'
         }
 
         if(!classpath.empty) {
-            args+= '--classpath'
-            args+= classpath.asPath
+            args.add '--classpath'
+            args.add classpath.asPath
         }
 
         if(showAllErrors) {
-            args+='--all-errors'
+            args.add '--all-errors'
         }
 
         // TODO: project.gradle.startParameter.??? -> --no-color. Only specific versions of gradle
         //  For now, just turn colour off
-        args+='--no-color'
+        args.add '--no-color'
 
         // TODO: bootclasspath ?
         // TODO: macroclasspath ?
