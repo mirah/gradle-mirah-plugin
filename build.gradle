@@ -4,7 +4,7 @@ plugins {
 //    id 'org.ysb33r.bintray' version '1.5'
     id 'com.gradle.plugin-publish' version '0.9.4'
     id 'com.github.hierynomus.license' version '0.13.1'
-    id 'org.ysb33r.gradletest' version '1.0-beta3'
+    id 'org.ysb33r.gradletest' version '1.0-beta4'
 }
 
 group = 'org.ysb33r.gradle'
@@ -74,7 +74,7 @@ test {
 }
 
 gradleTest {
-    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9', '2.10', '2.12', '2.14'
+    versions '2.0' ,'2.2', '2.3', '2.5', '2.8', '2.9', '2.10', '2.12', '2.14', '3.1'
 }
 
 license {
