@@ -1,5 +1,6 @@
 = Mirah Plugin for Gradle
 
+image::https://api.travis-ci.org/ysb33r/gradle-mirah-plugin.png[alt="Build Status", link="http://travis-ci.org/ysb33r/gradle-mirah-plugin"]
 
 [source,groovy]
 ----

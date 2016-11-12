@@ -1,0 +1,18 @@
+---
+language: groovy
+jdk:
+  - oraclejdk7
+  - oraclejdk8
+matrix:
+  exclude:
+    - jdk: oraclejdk7 # Building the gradle-mirah-plugin seems to require Java 8.
+
+# See https://docs.travis-ci.com/user/languages/groovy#Caching
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - build/gradleDist/
+
