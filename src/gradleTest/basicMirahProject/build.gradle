@@ -9,7 +9,7 @@ buildscript {
 apply plugin : 'org.mirah.lang'
 
 dependencies {
-    compile 'org.mirah:mirah:0.1.4'
+    compile 'org.mirah:mirah:0.2.1'
 }
 
 task runGradleTest {
