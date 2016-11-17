@@ -5,7 +5,7 @@ image::https://api.travis-ci.org/ysb33r/gradle-mirah-plugin.png[alt="Build Statu
 [source,groovy]
 ----
 plugins {
-  id 'org.mirag.lang' version '0.9'
+  id 'org.mirah.lang' version '0.9'
 }
 
 dependencies {
