@@ -7,6 +7,8 @@ plugins {
     id 'org.ysb33r.gradletest' version '1.0-beta4'
 }
 
+apply plugin: "maven"
+
 group = 'org.ysb33r.gradle'
 version = '1.0-beta1-SNAPSHOT'
 

@@ -118,6 +118,11 @@ class MirahCompile extends AbstractCompile {
         } else if(project.logging.level == LogLevel.QUIET) {
             args.add '--silent'
         }
+        
+        if (bootClasspath!=null) {
+            args.add '--bootclasspath'
+            args.add bootClasspath.asPath
+        }
 
         if(!classpath.empty) {
             args.add '--classpath'
@@ -165,5 +170,6 @@ class MirahCompile extends AbstractCompile {
 
     private List jvmArgs = []
     private Object mirahClasspath
+    FileCollection bootClasspath    
 }
 

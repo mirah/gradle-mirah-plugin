@@ -69,8 +69,8 @@ class MirahBasePlugin implements Plugin<Project> {
                 dependsOn srcSet.compileJavaTaskName
                 description  "Compiles the ${srcSet.name} ${LANG_NAME_C} source"
                 source = srcSet."${LANG_NAME}"
-                classpath = srcSet.compileClasspath
             }
+            compile.conventionMapping.map("classpath", { srcSet.compileClasspath }) // Evaluate classpath lazily in order to allow other code (running after us) to still change the "classpath" value.  
             project.tasks.getByName(srcSet.classesTaskName).dependsOn compile
         }
     }
