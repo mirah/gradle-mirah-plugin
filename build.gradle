@@ -10,7 +10,7 @@ plugins {
 apply plugin: "maven"
 
 group = 'org.ysb33r.gradle'
-version = '1.0-beta1-SNAPSHOT'
+version = '1.0-beta1'
 
 sourceCompatibility = 1.7
 plugins.withType(JavaPlugin) {
