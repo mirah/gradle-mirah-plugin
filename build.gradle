@@ -10,7 +10,7 @@ plugins {
 apply plugin: "maven"
 
 group = 'org.ysb33r.gradle'
-version = '1.0-beta1'
+version = '1.0-beta2'
 
 sourceCompatibility = 1.7
 plugins.withType(JavaPlugin) {
@@ -103,8 +103,8 @@ artifacts {
 
 pluginBundle {
     description = 'Mirah language plugin for Gradle'
-    website     = 'https://github.com/ysb33r/mirah-gradle-plugin'
-    vcsUrl      = 'https://github.com/ysb33r/mirah-gradle-plugin.git'
+    website     = 'https://github.com/mirah/mirah-gradle-plugin'
+    vcsUrl      = 'https://github.com/mirah/mirah-gradle-plugin.git'
 
     tags = ['language','mirah']
 
