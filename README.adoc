@@ -9,7 +9,7 @@ plugins {
 }
 
 dependencies {
-    compile 'org.mirah:mirah:0.2.1' // <1>
+  compile 'org.mirah:mirah:0.2.1' // <1>
 }
 ----
 <1> Define the version of Mirah to be used for compilation
